@@ -2,14 +2,22 @@ package com.example.chapter8
 
 import android.app.AlertDialog
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.chapter8.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    //이미지 가져오
+    private val imageLoadLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
+        updateImages(uriList)
+    }
+
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadImage(){
-        Toast.makeText(this,"이미지를 가져올 예정",Toast.LENGTH_SHORT).show()
+        imageLoadLauncher.launch("image/*")
     }
 
     private fun requestReadExternalStorage(){
@@ -63,6 +71,27 @@ class MainActivity : AppCompatActivity() {
             REQUEST_READ_EXTERNAL_STORAGE
         )
     }
+
+    private fun updateImages(uriList: List<Uri>) {
+
+    }
+
+    override fun onRequestPermissionsResult(//외부저장소 권한 동의하면 바로 이미지 가져올 수 있도록 사용자 편의성 높여줌
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when(requestCode){
+            REQUEST_READ_EXTERNAL_STORAGE -> {
+                if(grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+                    loadImage()
+                }
+            }
+        }
+    }
+
     companion object {
         const val REQUEST_READ_EXTERNAL_STORAGE = 100
     }
