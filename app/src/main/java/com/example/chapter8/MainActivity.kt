@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
             }
             shouldShowRequestPermissionRationale (
                 android.Manifest.permission.READ_EXTERNAL_STORAGE
-             ) -> {
-                 showPermissionInfoDiaglog()
-             }
+            ) -> {
+                showPermissionInfoDiaglog()
+            }
             else -> {
                 requestReadExternalStorage()
             }
