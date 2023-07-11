@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateImages(uriList: List<Uri>) {
         val images = uriList.map{ ImageItems.Image(it) }
-        imageAdapter.submitList(images)
+        val updatedImages = imageAdapter.currentList.toMutableList().apply { addAll(images) }
+        imageAdapter.submitList(updatedImages)
     }
 
     override fun onRequestPermissionsResult(//외부저장소 권한 동의하면 바로 이미지 가져올 수 있도록 사용자 편의성 높여줌
