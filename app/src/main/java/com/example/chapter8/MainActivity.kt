@@ -85,7 +85,8 @@ class MainActivity : AppCompatActivity() {
 
         when(requestCode){
             REQUEST_READ_EXTERNAL_STORAGE -> {
-                if(grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+                val resultCode = grantResults.firstOrNull() ?: PackageManager.PERMISSION_GRANTED //널 처리
+                if(resultCode == PackageManager.PERMISSION_GRANTED) {
                     loadImage()
                 }
             }
